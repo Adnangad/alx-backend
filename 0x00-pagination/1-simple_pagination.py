@@ -38,6 +38,8 @@ class Server:
         Args:
         page: page number
         page_size: size of contents in page or page limit
+        Returns:
+        list of lists or empty list if page_size is out of range
         """
         assert type(page_size) == int and type(page) == int
         assert page > 0 and page_size > 0
