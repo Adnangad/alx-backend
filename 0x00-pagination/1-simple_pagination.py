@@ -1,6 +1,10 @@
+#!/usr/bin/env python3
 import csv
 import math
 from typing import List, Tuple
+"""
+Contains a module
+"""
 
 
 class Server:
