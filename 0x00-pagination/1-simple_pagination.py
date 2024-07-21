@@ -22,6 +22,7 @@ class Server:
 
         return self.__dataset
 
+    @staticmethod
     def index_range(self, page: int, page_size: int) -> Tuple[int, int]:
         """
         Args:
@@ -31,14 +32,14 @@ class Server:
         start: int = (page - 1) * page_size
         end: int = start + page_size
         return(start, end)
-    
+
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """
         Returns pages
         """
         if not isinstance(page, int) or not isinstance(page_size, int):
             raise AssertionError("Both page and page_size must be an integer")
-        if page <= 0 or page_size<= 0:
+        if page <= 0 or page_size <= 0:
             raise AssertionError("Both page and page_siz must be > 0")
         data = self.dataset()
         start, end = self.index_range(page, page_size)
