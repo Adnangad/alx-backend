@@ -35,12 +35,12 @@ class Server:
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """
-        Returns pages
+        Args:
+        page: page number
+        page_size: size of contents in page or page limit
         """
-        if not isinstance(page, int) or not isinstance(page_size, int):
-            raise AssertionError("Both page and page_size must be an integer")
-        if page <= 0 or page_size <= 0:
-            raise AssertionError("Both page and page_siz must be > 0")
+        assert type(page_size) == int and type(page) == int
+        assert page > 0 and page_size > 0
         data = self.dataset()
         start, end = self.index_range(page, page_size)
         return data[start:end]
