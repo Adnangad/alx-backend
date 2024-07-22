@@ -50,14 +50,14 @@ class Server:
         cur_idx = index
         idx_data = []
         while count < page_size and cur_idx < len(keys):
-                if cur_idx in data:
-                        idx_data.append(data[cur_idx])
-                        count = count + 1
-                cur_idx = cur_idx + 1
+            if cur_idx in data:
+                idx_data.append(data[cur_idx])
+                count = count + 1
+            cur_idx = cur_idx + 1
         next_index = cur_idx if cur_idx < len(keys) else None
         return {
             'index': index,
-            'data': idx_data,
+            'data': data,
             'page_size': page_size,
             'next_index': next_index
-        }
+            }
