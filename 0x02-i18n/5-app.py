@@ -1,37 +1,18 @@
 #!/usr/bin/env python3
-""" This module initializes a web app"""
-from flask import Flask, render_template, request, g
+"""
+A flask web app
+"""
+from flask import Flask
+from flask import g, request
+from flask import render_template
 from flask_babel import Babel
 
 
-users = {
-    1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
-    2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
-    3: {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
-    4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
-}
-
-
-def get_user():
-    """ retreives a user"""
-    user_id = request.args.get('login_as')
-    if user_id:
-        try:
-            user_id = int(user_id)
-            return users.get(user_id)
-        except ValueError:
-            return None
-    return None
-
-
-def before_request():
-    """ sets the user"""
-    g.user = get_user()
-
-
 class Config(object):
-    """ Configures the language and locale"""
-    LANGUAGES = ["en", "fr"]
+    """
+    Application configuration class
+    """
+    LANGUAGES = ['en', 'fr']
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_DEFAULT_TIMEZONE = 'UTC'
 
@@ -42,17 +23,36 @@ babel = Babel(app)
 
 
 @babel.localeselector
-def get_locale():
-    """Gets the best match for the user's locale."""
-    user_locale = getattr(g, 'user', {}).get('locale')
-    if user_locale and user_locale in app.config['LANGUAGES']:
-        return user_locale
+def get_locale() -> str:
+    """ Retrieves the locale"""
+    locale = request.args.get('locale', '').strip()
+    if locale and locale in Config.LANGUAGES:
+        return locale
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
-@app.route("/", strict_slashes=False)
-def home_pg():
-    """Renders the home page."""
+users = {
+    1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
+    2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
+    3: {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
+    4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
+}
+
+
+def get_user(id):
+    """ gets user from dict using id"""
+    return users.get(int(id), 0)
+
+
+@app.before_request
+def before_request():
+    """ Adds user"""
+    setattr(g, 'user', get_user(request.args.get('login_as', 0)))
+
+
+@app.route('/', strict_slashes=False)
+def index():
+    """ Renders a html file"""
     return render_template('5-index.html')
 
 
